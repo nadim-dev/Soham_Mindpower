@@ -1,0 +1,262 @@
+:root {
+  --brand: #0057B8;
+  --muted: #6b7280;
+  --container-w: 1280px;
+  --radius: 12px;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.container {
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  padding: 56px 0;
+  display: flex;
+  align-items: center;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 28px;
+  line-height: 1.05;
+  margin: 0 0 8px;
+  font-weight: 800;
+}
+
+.hero-sub {
+  font-size: 16px;
+  margin: 0 0 6px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-quote {
+  font-size: 16px;
+  margin-bottom: 18px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+}
+
+.btn-outline:hover {
+  background: #0057b8;
+  color: #fff;
+  /* border: 1px solid var(--brand); */
+}
+
+/* ---------- Memories section ---------- */
+.memories {
+  padding: 48px 0 120px;
+  /* Increased bottom padding for spacing */
+  text-align: center;
+}
+
+.memories-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  color: #0f172a;
+}
+
+/* Base Grid (Mobile default) */
+.memories-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+/* Card base */
+.mem-card {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  /* Increased radius */
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.mem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.mem-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mem-card:hover img {
+  transform: scale(1.05);
+}
+
+/* CTA wrapper */
+.memories-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.memories-cta .btn {
+  background-color: var(--brand);
+  /* Button Redesign */
+  color: white;
+  padding: 12px 32px;
+  border-radius: 50px;
+  /* Pill shape */
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.memories-cta .btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* Responsive Grid (Desktop) */
+@media (min-width: 768px) {
+
+  /* Restored Hero Styles */
+  .hero {
+    padding: 72px 0;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr 480px;
+    gap: 40px;
+  }
+
+  .hero-content {
+    text-align: left;
+  }
+
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+  }
+
+  /* Memories Grid */
+  .memories-grid {
+    display: grid;
+    /* 3 Column Layout */
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: dense;
+    /* Help pack items */
+    gap: 20px;
+    max-width: 1024px;
+    /* Constrain max width for better aesthetic */
+    margin: 0 auto 40px;
+  }
+
+  /* Specific Bento Placements based on HTML order:
+     Order: Large, Tall, Small, Small, Large
+  */
+
+  /* 1. Large Card: Top Left (Span 2 cols) */
+  .mem-card-large:nth-of-type(1) {
+    grid-column: span 2;
+    aspect-ratio: 16/9;
+  }
+
+  /* 2. Tall Card: Top Right (Span 1 col, 2 rows) */
+  .mem-card-tall {
+    grid-column: span 1;
+    grid-row: span 2;
+    height: 100%;
+    /* Fill the height of 2 rows */
+  }
+
+  /* 3 & 4. Small Cards: Fill the gap below Large card (1 col each) */
+  .mem-card-small {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
+  }
+
+  /* 5. Last Large Card: Bottom Full Width or Span 3 */
+  .mem-card-large:nth-last-of-type(1) {
+    grid-column: 1 / -1;
+    /* Span all 3 columns */
+    aspect-ratio: 21/9;
+    /* Panoramic */
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  /* Restored Hero Styles */
+  .hero-inner {
+    grid-template-columns: 1fr 560px;
+  }
+
+  .memories {
+    padding-top: 64px;
+  }
+
+  .memories-title {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding: 0 24px;
+  }
+}

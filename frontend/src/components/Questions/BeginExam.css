@@ -1,0 +1,220 @@
+/* Container handling */
+.begin-exam-container {
+    background-color: #F9FAFB;
+    /* Light gray/white bg */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Header */
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: transparent;
+}
+
+.brand-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2563EB;
+    /* Check match with blue in ss */
+    margin: 0;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Main Content Area */
+.exam-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.exam-prompt {
+    font-size: 24px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Question Card */
+.exam-card {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px 60px;
+    border-radius: 4px;
+    /* Slightly squarish as per ss */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.que-count {
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 20px;
+}
+
+.que-text {
+    font-size: 20px;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 30px;
+}
+
+/* Options */
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.option-row {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.custom-radio {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #6B7280;
+    border-radius: 50%;
+    margin-right: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+/* Selected state for radio */
+.option-row.selected .custom-radio {
+    border-color: #2563EB;
+    /* Or black depending on pref, choosing blue/neutral per standard */
+}
+
+/* Inner dot behavior handled purely by simple div or css logic in jsx, 
+   but let's do simple css pseudo element for pure css handling if we used input.
+   Since we will likely use div, I'll count on class name. */
+
+.option-text {
+    font-size: 18px;
+    color: #374151;
+}
+
+/* Footer Action */
+.exam-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Stack buttons on mobile by default, override for desktop if needed or keep stacked */
+    align-items: center;
+    gap: 15px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.next-btn {
+    background-color: #FCD34D;
+    /* Yellowish orange - Primary action */
+    color: #000;
+    font-weight: 600;
+    padding: 12px 0;
+    /* Full width set below */
+    width: 200px;
+    /* Fixed width for standard */
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;
+}
+
+.next-btn:hover {
+    background-color: #fbbf24;
+}
+
+.end-exam-btn {
+    background-color: transparent;
+    color: #6B7280;
+    font-weight: 500;
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.end-exam-btn:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .exam-header {
+        padding: 15px 20px;
+    }
+
+    .brand-title {
+        font-size: 20px;
+    }
+
+    .exam-content {
+        padding: 10px;
+        justify-content: start;
+        /* Allow scroll on small screens if needed, but trying to keep it tight */
+    }
+
+    .exam-prompt {
+        font-size: 18px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 0 10px;
+    }
+
+    .exam-card {
+        padding: 24px 20px;
+        max-width: 100%;
+        box-shadow: none;
+        /* Often cleaner on mobile or keep light shadow */
+        border: 1px solid #f3f4f6;
+    }
+
+    .que-text {
+        font-size: 18px;
+    }
+
+    .option-text {
+        font-size: 16px;
+    }
+
+    .next-btn {
+        width: 90%;
+        /* Full width button on mobile feels better */
+        padding: 14px 0;
+    }
+}

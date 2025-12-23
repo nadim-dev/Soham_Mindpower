@@ -1,0 +1,90 @@
+soham_mindspace/
+.gitignore
+package-lock.json
+package.json
+README.md
+soham_mindspace.txt
+tailwind.config.js
+public/
+  index.html
+  manifest.json
+  robots.txt
+  favicon.ico
+  logo192.png
+  logo512.png
+  Images/
+    doctor-image.png
+    Book-image.png
+src/
+  App.css
+  App.js
+  App.test.js
+  index.css
+  index.js
+  reportWebVitals.js
+  setupTests.js
+  logo.svg
+  images/
+    testimonial-profile-img.png
+    memory-5.png
+    memory-4.png
+    memory-3.png
+    memory-2.png
+    memory-1.png
+    Home-Page-Top-Section.png
+    dr_image.jpg
+  components/
+    About.jsx
+    AdminLogin.css
+    AdminLogin.jsx
+    Contact.jsx
+    DashboardLayout.jsx
+    DoctorDashboard.jsx
+    DrProfile.css
+    DrProfile.jsx
+    Expertise.css
+    Expertise.jsx
+    Footer.css
+    Footer.jsx
+    Gallery.jsx
+    Home.css
+    Home.jsx
+    Login.css
+    Login.jsx
+    Navbar.css
+    Navbar.jsx
+    Services.jsx
+    SignIn.module.css
+    SignIn.jsx
+    Testimonial.css
+    TestimonialSection.jsx
+    admin-panel/
+      AddQA.css
+      AddQA.jsx
+      AdminPayments.css
+      AdminPayments.jsx
+      PatientDetailAdmin.jsx
+      PatientEnq.jsx
+      Settings.css
+      Settings.jsx
+      SideBar.jsx
+    Patient/
+      PatientDashboard.css
+      PatientDashboard.jsx
+      PatientDetails.jsx
+      PatientNotifications.css
+      PatientNotifications.jsx
+      PatientPayment.css
+      PatientPayment.jsx
+      PatientProfile.jsx
+      Patients.jsx
+      PatientSideBar.jsx
+      PatientVideo.css
+      PatientVideo.jsx
+    Questions/
+      AssessmentIntro.jsx
+      BeginExam.css
+      BeginExam.jsx
+      LanguagePreference.jsx
+      TestCompletion.css
+      TestCompletion.jsx

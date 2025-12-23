@@ -1,0 +1,24 @@
+backend/
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── authController.js
+│   ├── adminController.js
+│   ├── doctorController.js
+│   └── patientController.js
+├── middleware/
+│   ├── auth.js
+│   └── upload.js
+├── models/
+│   ├── User.js
+│   ├── Admin.js
+│   ├── Doctor.js
+│   └── Patient.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── adminRoutes.js
+│   ├── doctorRoutes.js
+│   └── patientRoutes.js
+├── uploads/
+├── .env
+└── server.js

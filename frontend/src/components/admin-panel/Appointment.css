@@ -1,0 +1,127 @@
+/* Container */
+.appointment-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* Main content */
+.appointment-main {
+  flex: 1;
+  margin-left: 16rem; /* sidebar width */
+  padding: 1.5rem;
+}
+
+/* Sidebar responsive */
+@media (max-width: 1024px) {
+  .appointment-main {
+    margin-left: 0;
+  }
+  .sidebar {
+    width: 4rem; /* icons only */
+  }
+  .sidebar .label {
+    display: none; /* hide text, keep icons */
+  }
+}
+
+/* Header */
+.page-header span {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.page-header h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+.header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: .5rem;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: .375rem;
+  display: flex;
+  align-items: center;
+  transition: background .3s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.icon {
+  margin-right: .5rem;
+  font-size: 1.25rem;
+}
+
+/* Appointment list */
+.appointment-list {
+  background: #fff;
+  border-radius: .5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.appointment-header,
+.appointment-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: .5rem 0;
+}
+
+.appointment-header {
+  font-weight: 600;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.appointment-row.even {
+  background: #f3f4f6;
+}
+
+.status {
+  color: #16a34a;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: .5rem;
+}
+
+.pagination-controls button {
+  padding: .5rem 1rem;
+  background: #d1d5db;
+  border-radius: .375rem;
+}
+
+.pagination-controls button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .appointment-header,
+  .appointment-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+      

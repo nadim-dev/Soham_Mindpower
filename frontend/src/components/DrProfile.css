@@ -1,0 +1,75 @@
+/* DR PROFILE SECTION */
+.drprofile-section {
+  width: 100%;
+  background: #fff;
+  padding: 48px 0;
+}
+
+.drprofile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.drprofile-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #000;
+}
+
+.drprofile-para {
+  font-size: 16px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  color: #111;
+}
+
+/* Button */
+.btn-outline-blue {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 1px solid #0057b8;
+  background: #fff;
+  color: #0057b8;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+
+.btn-outline-blue:hover {
+  background: #0057b8;
+  color: #fff;
+}
+
+/* IMAGE */
+.drprofile-image-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.drprofile-image {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+/*For responsive*/
+@media (min-width: 768px) {
+  .drprofile-container {
+    grid-template-columns: 1fr 400px;
+  }
+
+  .drprofile-title {
+    font-size: 34px;
+  }
+
+  .drprofile-para {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,51 @@
+.add-patient-container {
+    @apply flex bg-gray-50 min-h-screen font-inter;
+}
+
+.add-patient-content {
+    @apply flex-1 ml-0 md:ml-64 p-6 lg:p-10 max-w-7xl mx-auto w-full;
+}
+
+.add-patient-header {
+    @apply flex items-center justify-between mb-8;
+}
+
+.add-patient-title {
+    @apply text-2xl md:text-3xl font-bold text-gray-900;
+}
+
+.add-patient-form-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8;
+}
+
+.form-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6 mb-8;
+}
+
+.form-group {
+    @apply flex flex-col;
+}
+
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.form-input {
+    @apply w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none;
+}
+
+.form-textarea {
+    @apply w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none resize-y;
+}
+
+.form-actions {
+    @apply flex items-center justify-end gap-4 mt-8 pt-6 border-t border-gray-100;
+}
+
+.btn-cancel {
+    @apply px-6 py-2.5 rounded-lg font-medium text-gray-600 hover:bg-gray-100 transition-colors;
+}
+
+.btn-submit {
+    @apply px-8 py-2.5 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30 hover:shadow-blue-600/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0;
+}
