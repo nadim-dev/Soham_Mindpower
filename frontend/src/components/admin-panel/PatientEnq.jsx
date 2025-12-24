@@ -1,20 +1,49 @@
 import React from 'react';
 import SideBar from './SideBar';
 import { Link } from 'react-router-dom';
+import { useState,useEffect } from 'react';
+import { appointmentAPI } from '../../services/api';
+import { Trash2 } from 'lucide-react';
 
 const PatientEnq = () => {
+    const [appointmentHist,setAppointmentHist]=useState([]);
     const stats = [
         { title: 'Unread Inquiries', count: 12 },
         { title: 'Pending Response', count: 5 },
         { title: 'Resolved', count: 28 },
     ];
 
-    const inquiries = [
-        { name: 'Chinaza Akachi', status: 'Scheduled', date: '09 Dec 2019', time: '05:18AM' },
-        { name: 'Bernarr Dominik', status: 'Scheduled', date: '26 Feb 2019', time: '05:10AM' },
-        { name: 'Beth Murphy', status: 'Scheduled', date: '16 Sep 2019', time: '00:37PM' },
-        { name: 'Dameon Peterson', status: 'Scheduled', date: '08 Oct 2019', time: '05:11AM' },
-    ];
+     useEffect(() => {
+       const fetchAppointments = async () => {
+         try {
+           const response = await appointmentAPI.getAllAppointments();
+           setAppointmentHist(response.data); 
+         } catch (error) {
+           console.error("Failed to fetch appointments", error.message);
+         }
+       };
+       fetchAppointments();
+     }, []);
+    
+
+  const handleDelete = async (id) => {
+   console.log("handle delete function is running");
+
+  try {
+    const response=await appointmentAPI.deleteAppointment(id);
+    if(response.data){
+     // remove from UI instantly
+     setAppointmentHist(prev =>
+      prev.filter(appt => appt.id !== id)
+     );
+    }
+  
+  } catch (error) {
+    console.error("Delete failed", error.message);
+  }
+ };
+
+
 
     return (
         <div className="flex bg-gray-50 min-h-screen font-inter">
@@ -51,16 +80,17 @@ const PatientEnq = () => {
                         <div>Status</div>
                         <div>Date</div>
                         <div>Time</div>
+                        <div>Action</div>
                     </div>
 
                     <div className="space-y-4 md:space-y-8">
-                        {inquiries.map((inquiry, index) => (
+                        {appointmentHist.map((inquiry, index) => (
                             <div key={index} className="border md:border-none rounded-lg p-4 md:p-0 grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-0 text-gray-900 md:px-4 items-center bg-gray-50 md:bg-white shadow-sm md:shadow-none">
                                 {/* Mobile Labels & Data */}
                                 <div className="flex justify-between md:block">
                                     <span className="md:hidden text-gray-500 font-medium">Name:</span>
                                     <Link to={`/admin/patient-detail/${index}`} className="font-semibold md:font-normal text-blue-600 hover:underline">
-                                        {inquiry.name}
+                                        {inquiry.patient_name}
                                     </Link>
                                 </div>
                                 <div className="flex justify-between md:block">
@@ -73,24 +103,27 @@ const PatientEnq = () => {
                                 </div>
                                 <div className="flex justify-between md:block">
                                     <span className="md:hidden text-gray-500 font-medium">Date:</span>
-                                    <span>{inquiry.date}</span>
+                                    <span>{inquiry.appointment_date}</span>
                                 </div>
                                 <div className="flex justify-between md:block">
                                     <span className="md:hidden text-gray-500 font-medium">Time:</span>
-                                    <span>{inquiry.time}</span>
+                                    <span>{inquiry.appointment_time}</span>
                                 </div>
+                                <div className="flex justify-between md:justify-center">
+                                   <span className="md:hidden text-gray-500 font-medium">Action:</span>
+                                  <button
+                                    onClick={() => handleDelete(inquiry.id)}
+                                    className="text-red-600 hover:text-red-800 transition-colors"
+                                    title="Delete appointment"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                </div>
+
                             </div>
                         ))}
                     </div>
 
-                    {/* Pagination */}
-                    <div className="mt-auto pt-8 flex justify-between items-center text-sm text-gray-900">
-                        <div className="px-4">4\30</div>
-                        <div className="flex gap-4">
-                            <button className="px-6 py-2 bg-gray-100 rounded text-gray-600 font-medium hover:bg-gray-200 transition-colors">PREVIOUS</button>
-                            <button className="px-6 py-2 bg-[#FCD34D] rounded text-gray-900 font-medium hover:bg-[#fbbf24] transition-colors">NEXT</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div >

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 const API_BASE_URL = 'http://localhost:5000/api';
 
 const api = axios.create({
@@ -30,5 +31,14 @@ export const videoAPI = {
 export const adminAPI = {
   addPatient: (data) => api.post("/admin/addpatient", data),
 };
+
+// ----------- APPOINTMENT ----------------------
+
+export const appointmentAPI={
+   takeAppointment:(data)=> api.post("/appointment",data),
+   getAllAppointments:()=>api.get("/appointment"),
+   deleteAppointment: (id) => api.delete(`appointment/${id}`)
+}
+
 
 export default api;

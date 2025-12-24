@@ -3,6 +3,7 @@ import { Calendar, Clock, CheckCircle, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PatientSideBar from './PatientSideBar';
 import './BookAppointment.css';
+import { appointmentAPI } from '../../services/api';
 
 const BookAppointment = () => {
     const navigate = useNavigate();
@@ -29,14 +30,19 @@ const BookAppointment = () => {
     const timeSlots = generateTimeSlots();
 
     // Mock functionality to handle booking
-    const handleBookAppointment = () => {
+    const handleBookAppointment = async () => {
         if (!selectedDate || !selectedTime) return;
-
-        // Simulating API call
-        setIsBooked(true);
-        setTimeout(() => {
-            // navigate('/patient/dashboard'); // Optional: redirect after some time
-        }, 2000);
+        try{
+        const response=await appointmentAPI.takeAppointment({selectedDate,selectedTime});
+        if(response.data){
+         setIsBooked(true);
+         setTimeout(() => {
+            navigate('/patient/dashboard'); // Optional: redirect after some time
+         }, 2000);
+        }}catch(err){
+            console.log(err.message);
+        }
+        
     };
 
     // Get today's date for min attribute in date picker
