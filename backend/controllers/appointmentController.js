@@ -1,11 +1,18 @@
 const pool = require("../config/db");
 const { sendEmail } = require("../services/emailService");
+const {convertTo24Hour}=require("../utils/convertTo24Hour");
+const {convertTo12Hour}=require("../utils/convertTo12Hours");
+const {formatAppointment}=require("../utils/formatAppointment");
+const {formatDateReadable}=require("../utils/formatDate");
+
 
 const createAppointment = async (req, res) => {
   console.log("appointment functions are running");
-  const { appointment_date, appointment_time } = req.body;
-
-  if (!appointment_date || !appointment_time) {
+  console.log(req.body);
+  console.log("userId",req.user.userId);
+  const { selectedDate:appointment_date, selectedTime} = req.body;
+  
+  if (!appointment_date || !selectedTime) {
     return res.status(400).json({
       message: "Date and time are required",
     });
@@ -15,7 +22,7 @@ const createAppointment = async (req, res) => {
     // get patient info
     const [rows] = await pool.execute(
       "SELECT id, full_name FROM patients WHERE user_id = ?",
-      [req.user.id]
+      [req.user.userId]
     );
 
     if (rows.length === 0) {
@@ -23,14 +30,18 @@ const createAppointment = async (req, res) => {
     }
 
     const patient = rows[0];
+    const appointment_time = convertTo24Hour(selectedTime);
+
 
     // save appointment
-    await pool.execute(
+    const [data]=await pool.execute(
       `INSERT INTO appointments 
-       (patient_id,patient_name,appointment_date, appointment_time)
-       VALUES (?, ?, ?)`,
-      [patient.id,patient.full_name,appointment_date, appointment_time]
+       (patient_id,patient_name,appointment_date, appointment_time,status)
+       VALUES (?,?,?,?,?)`,
+      [patient.id,patient.full_name,appointment_date, appointment_time,"confirmed"]
     ); 
+
+    console.log("save appointment data",data);
 
     // send email to doctor
     await sendEmail({
@@ -54,33 +65,54 @@ const createAppointment = async (req, res) => {
   }
 };
 
- const getAllAppointments = async (req, res) => {
+const getAllAppointmentsForAdmin = async (req, res) => {
   try {
-    
-    const [appointments] = await pool.execute(`
-      SELECT 
-        a.id,
-        a.patient_name,
-        a.appointment_date,
-        a.appointment_time,
-        a.status,
-        a.created_at
-      FROM appointments a
-      ORDER BY a.appointment_date DESC, a.appointment_time DESC
-    `);
+    const [rows] = await pool.execute(
+      `SELECT 
+         id,
+         patient_name,
+         appointment_date,
+         appointment_time,
+         status
+       FROM appointments
+       ORDER BY appointment_date, appointment_time`
+    );
 
-    res.status(200).json({
-      success: true,
-      total: appointments.length,
-      appointments,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to fetch appointments",
-      error: error.message,
-    });
+    const formattedAppointments = rows.map(appt => ({
+      id: appt.id,
+      patient_name: appt.patient_name,
+      appointment_date: formatDateReadable(appt.appointment_date),
+      appointment_time: convertTo12Hour(appt.appointment_time),
+      readable: formatAppointment(
+        appt.appointment_date,
+        appt.appointment_time
+      ),
+      status: appt.status
+    }));
+
+    res.json(formattedAppointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
+// DELETE /api/admin/appointments/:id
+const deleteAppointment = async (req, res) => {
+  console.log("delete appointment function is running");
+  try{
+  const { id } = req.params;
 
-module.exports = { createAppointment,getAllAppointments };
+  await pool.execute(
+    "DELETE FROM appointments WHERE id = ?",
+    [id]
+  );
+
+  res.json({ message: "Appointment deleted successfully" });
+}catch(err){
+  return res.status(404).json({error:err.message});
+}
+};
+
+
+module.exports = { createAppointment,getAllAppointmentsForAdmin,deleteAppointment };
