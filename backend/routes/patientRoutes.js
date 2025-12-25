@@ -1,9 +1,11 @@
 const express = require('express');
 const { authenticateToken } = require('../middleware/auth');
-const {  getAdminProfile } = require('../controllers/patientController');
+const {  getPatientProfile,getPatientAppointmentHistory } = require('../controllers/patientController');
 
 const router = express.Router();
 
-router.get('/profile', authenticateToken, getAdminProfile);
+router.get('/profile/:id', authenticateToken, getPatientProfile);
+
+router.get("/appointmenthistory/:id",authenticateToken,getPatientAppointmentHistory);
 
 module.exports = router;

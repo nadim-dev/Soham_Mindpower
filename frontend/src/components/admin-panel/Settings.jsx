@@ -4,6 +4,7 @@ import './Settings.css';
 import { User, Bell, Lock, Shield, Save } from 'lucide-react';
 
 const Settings = () => {
+   
     return (
         <div className="flex bg-gray-50 min-h-screen font-inter">
             <SideBar />

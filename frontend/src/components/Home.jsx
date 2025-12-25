@@ -8,6 +8,7 @@ import memory2 from "../images/memory-2.png";
 import memory3 from "../images/memory-3.png";
 import memory4 from "../images/memory-4.png";
 import memory5 from "../images/memory-5.png";
+import { useEffect } from "react";
 
 import DrProfile from "./DrProfile";
 import OurExpertise from "./Expertise";
@@ -17,6 +18,21 @@ import TestimonialSection from "./TestimonialSection";
 
 export default function Home() {
   const navigate = useNavigate();
+  
+    useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
+      const parsedUser = JSON.parse(user);
+
+      if (parsedUser.role === "admin") {
+        navigate("/admin/dashboard", { replace: true });
+      } else if (parsedUser.role === "patient") {
+        navigate("/patient/dashboard", { replace: true });
+      }
+    }
+  }, [navigate]);
 
   return (
     <main className="home-root">

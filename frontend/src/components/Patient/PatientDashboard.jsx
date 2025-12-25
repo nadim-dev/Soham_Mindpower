@@ -53,7 +53,7 @@ const PatientDashboard = () => {
                 {/* Dashboard Grid Content - Reused logic but cleaned structure */}
                 <div className="dashboard-grid">
                     {/* ... (Existing grid logic) ... */}
-
+                     
                     {/* Left Column */}
                     <div className="left-column">
                         {/* Stats Row */}
@@ -147,7 +147,9 @@ const PatientDashboard = () => {
                             <h3 className="card-title">Quick Actions</h3>
                             <div className="flex flex-col gap-3">
                                 <button className="w-full py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">Book Appointment</button>
-                                <button className="w-full py-2 border border-red-200 text-red-600 rounded-lg font-medium hover:bg-red-50 transition" >Chat with Doctor</button>
+                                <button className="w-full py-2 border border-red-200 text-red-600 rounded-lg font-medium hover:bg-red-50 transition"  onClick={()=>{
+                                    navigate("/chat")
+                                }}>Chat with Doctor</button>
                                 <button className="w-full py-2 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition">Emergency Support</button>
                             </div>
                         </div>

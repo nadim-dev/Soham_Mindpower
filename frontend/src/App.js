@@ -33,6 +33,9 @@ import Appointment from './components/admin-panel/Appointment';
 import VideoForm from './components/admin-panel/VideoForm';
 import AddPatient from './components/admin-panel/AddPatient';
 import BookAppointment from './components/Patient/BookAppointment';
+import ChatPage from './components/chatPage';
+import AdminEnqueryList from './components/admin-panel/Adminenquiry';
+
 
 
 function App() {
@@ -63,7 +66,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/admin/patient-enquiries" element={<PatientEnq />} />
+          <Route path="/admin/patient/appointment" element={<PatientEnq />} />
           <Route path="/admin/dashboard" element={<DoctorDashboard />} />
           <Route path="/admin/patients" element={<Patients />} />
           <Route path="/admin/patient-details" element={<PatientDetails />} />
@@ -84,8 +87,11 @@ function App() {
           <Route path="/admin/appointment" element={<Appointment />} />
           <Route path="/admin/videoform" element={<VideoForm />} />
           <Route path="/admin/add-patient" element={<AddPatient />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/admin/patient-enquiries" element={<AdminEnqueryList />} />
+
         </Routes>
-      </div>
+      </div>  
       {!shouldHideNavbarFooter && <Footer />}
     </div>
   );

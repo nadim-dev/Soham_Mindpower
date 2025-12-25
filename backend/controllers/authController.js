@@ -36,7 +36,7 @@ const login = async (req, res) => {
 
     // 4. Generate JWT
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
+      { userId: user.id, email: user.email,name:user.name, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -47,7 +47,8 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        name:user.name
       }
     });
 
@@ -55,5 +56,6 @@ const login = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 module.exports = { login };

@@ -9,9 +9,11 @@ import {
     Settings,
     LogOut,
     Menu,
-    X
+    X,
+    MessageSquare 
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 
 const SideBar = () => {
     const location = useLocation();
@@ -34,8 +36,8 @@ const SideBar = () => {
     const menuItems = [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
         { name: 'Patients', icon: Users, path: '/admin/patients' },
-        { name: 'Reports', icon: FileText, path: '/admin/reports' },
-        { name: 'Appointments', icon: Calendar, path: '/admin/patient-enquiries' },
+       { name: 'Inquiries', icon: FileText, path: '/admin/patient-enquiries' },
+        { name: 'Appointments', icon: Calendar, path: '/admin/patient/appointment' },
         {
             name: 'Content Management',
             icon: FileEdit,
@@ -44,9 +46,10 @@ const SideBar = () => {
                 { name: 'Add Videos', path: '/admin/videoform' }
             ]
         },
+        {name:"Chat to Patient",icon:MessageSquare,path:"/chat"},
         { name: 'Payment', icon: CreditCard, path: '/admin/payments' },
         { name: 'Settings', icon: Settings, path: '/admin/settings' },
-        // { name: 'Inquiries', icon: FileText, path: '/admin/patient-enquiries' },
+        
     ];
 
     const toggleSidebar = () => setIsOpen(!isOpen);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { authAPI } from "../services/api";
+import { inquiryAPI } from '../services/api';
 
 const ContactUs = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -30,7 +30,7 @@ const ContactUs = () => {
  
 
   try {
-    await authAPI.create(formData);
+    await inquiryAPI.createInquery(formData);
 
     alert("Enquiry sent successfully ✅");
 

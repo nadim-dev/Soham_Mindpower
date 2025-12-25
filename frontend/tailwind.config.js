@@ -9,6 +9,8 @@ module.exports = {
         'jaini': ['Jaini Purva', 'cursive'],
         'inter': ['Inter', 'sans-serif'],
       },
+      
+
     },
   },
   plugins: [],

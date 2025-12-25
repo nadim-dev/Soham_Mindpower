@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bell, Calendar, ChevronRight, Edit2 } from 'lucide-react';
-
 import PatientSideBar from './PatientSideBar';
+import { patientAPI } from '../../services/api';
+
+
 
 const PatientProfile = () => {
     const [activeTab, setActiveTab] = useState('Personal & Medical');
+  const [profile, setProfile] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ ADD THIS
+
+  // rest of your code
+
+
+
+
+
+
+
     // ... (rest of state logic stays same) ...
     const patientData = {
         name: 'Jane Doe',
@@ -38,6 +52,57 @@ const PatientProfile = () => {
             percentage: 45
         }
     };
+const user = JSON.parse(localStorage.getItem("user"));
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const profileRes = await patientAPI.getProfile(user.id);
+      setProfile(profileRes.data);
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false); // 🔴 THIS WAS MISSING OR NEVER REACHED
+    }
+  };
+
+  fetchData();
+}, []);
+
+
+useEffect(() => {
+  const fetchData = async () => {
+    console.log("getAppointments function is running");
+    try {
+      const profileRes = await patientAPI.getAppointments(user.id);
+      console.log(profileRes.data);
+      setAppointments(profileRes.data);
+
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false); // 🔴 THIS WAS MISSING OR NEVER REACHED
+    }
+  };
+
+  fetchData();
+}, []);
+
+
+
+
+if (!profile) {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <p className="text-gray-500 text-lg">Loading patient profile...</p>
+    </div>
+  );
+}
+
+
+
+
 
     return (
         <div className="flex bg-gray-50 min-h-screen font-inter">
@@ -64,9 +129,9 @@ const PatientProfile = () => {
                         </div>
 
                         <div className="text-center md:text-left pt-4">
-                            <h1 className="text-3xl font-bold text-gray-900">{patientData.name}</h1>
-                            <p className="text-gray-500 mt-1">{patientData.location}</p>
-                            <p className="text-gray-400 text-sm mt-1">{patientData.email}</p>
+                            <h1 className="text-3xl font-bold text-gray-900">{profile.full_name}</h1>
+                            <p className="text-gray-500 mt-1">{profile.location}</p>
+                            <p className="text-gray-400 text-sm mt-1">{profile.email}</p>
                         </div>
 
                         <div className="ml-auto flex items-center gap-4">
@@ -104,32 +169,32 @@ const PatientProfile = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-6 md:gap-y-8 gap-x-8">
                                     <div>
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Full Name</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.fullName}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.full_name}</p>
                                     </div>
                                     <div>
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Age</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.age}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.age}</p>
                                     </div>
                                     <div>
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Gender</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.gender}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.gender}</p>
                                     </div>
                                     <div>
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.contactNumber}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.contact_number}</p>
                                     </div>
 
                                     <div className="col-span-1 md:col-span-2 lg:col-span-2">
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Mental Health Condition</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.condition}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.mental_health_condition}</p>
                                     </div>
                                     <div className="col-span-1 md:col-span-2 lg:col-span-2">
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Past Treatments</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.pastTreatments}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.past_treatments}</p>
                                     </div>
                                     <div className="col-span-1 md:col-span-2 lg:col-span-4 border-t border-gray-100 pt-6 mt-2">
                                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Current Medications</label>
-                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{patientData.details.currentMedications}</p>
+                                        <p className="text-gray-900 font-semibold text-base md:text-lg">{profile.current_medications}</p>
                                     </div>
                                 </div>
                             </div>
@@ -139,23 +204,51 @@ const PatientProfile = () => {
                         <div className={`transition-opacity duration-300 ${activeTab === 'Appointments' || activeTab === 'Personal & Medical' ? 'block' : 'hidden'}`}>
                             <h2 className="text-2xl font-bold text-gray-400 mb-4 mt-8">Appointment History</h2>
                             <div className="space-y-4">
-                                {patientData.appointments.map((appt, index) => (
+                                {appointments.map((appt, index) => (
                                     <div key={index} className="bg-white rounded-xl shadow-sm p-6 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
                                         <div className="flex-shrink-0">
                                             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-500">
                                                 <Calendar size={24} />
                                             </div>
                                         </div>
-                                        <div className="flex-grow">
-                                            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
-                                                <h3 className="text-lg font-semibold text-gray-900">{appt.date}</h3>
-                                                <span className="text-orange-400 text-sm font-medium mt-1 md:mt-0">{appt.doctor}</span>
-                                            </div>
-                                            <p className="text-gray-600 text-sm mb-2">{appt.notes}</p>
-                                            <p className="text-gray-500 text-xs italic bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                                {appt.summary}
-                                            </p>
-                                        </div>
+                                <div className="flex-grow">
+  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+    {/* DATE & TIME */}
+  <h3 className="text-lg font-semibold text-gray-900">
+  {appt.appointment_date || "—"} • {appt.appointment_time || "—"}
+</h3>
+
+
+    {/* DOCTOR NAME */}
+    <span className="text-orange-400 text-sm font-medium mt-1 md:mt-0">
+      Dr. {appt.doctor_name || "Soham"}
+    </span>
+  </div>
+
+  {/* NOTES */}
+  <p className="text-gray-600 text-sm mb-2">
+    {appt.notes || "Appointment scheduled successfully."}
+  </p>
+
+  {/* SUMMARY */}
+  {appt.doctor_summary && (
+    <p className="text-gray-500 text-xs italic bg-gray-50 p-3 rounded-lg border border-gray-100">
+      Summary: {appt.doctor_summary}
+    </p>
+  )}
+
+  {/* STATUS */}
+ <p className="text-sm mt-1">
+  Status:{" "}
+  <span className="font-semibold text-blue-600">
+    {"Scheduled" || appt.status}
+  </span>
+</p>
+
+</div>
+
+
+
                                     </div>
                                 ))}
                             </div>

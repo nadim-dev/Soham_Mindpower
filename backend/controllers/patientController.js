@@ -1,24 +1,7 @@
 const pool = require('../config/db');
 const bcrypt = require("bcryptjs");
-
-const getAdminProfile = async (req, res) => {
-    try {
-        const [admins] = await pool.execute(
-            'SELECT a.*, u.email FROM admins a JOIN users u ON a.user_id = u.id WHERE u.id = ?',
-            [req.user.userId]
-        );
-        
-        if (admins.length === 0) {
-            return res.status(404).json({ message: 'Admin not found' });
-        }
-        
-        res.json(admins[0]);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-
+const {formatDateReadable}=require("../utils/formatDate")
+const {convertTo12Hour}=require("../utils/convertTo12Hours");
 // POST /api/auth/admin/addpatient
 const addPatient = async (req, res) => {
     console.log("add patient function is running");
@@ -120,5 +103,68 @@ const addPatient = async (req, res) => {
   }
 };
 
+const getPatientProfile = async (req, res) => {
+  try{
+  console.log("get patient profile function is runnnig");
+  const { id } = req.params;
+  console.log("id",id);
+  const [patientProfiledata] = await pool.execute(
+  `SELECT * FROM patients WHERE user_id = ?`,
+  [id]
+  );
+   
+  if (patientProfiledata.length === 0) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+ 
 
-module.exports = { getAdminProfile,addPatient };
+    res.json(patientProfiledata[0]);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getPatientAppointmentHistory = async (req, res) => {
+  try {
+    console.log("get appointment function is running");
+
+    const { id } = req.params; // users.id
+
+    const [appointmentHistorydata] = await pool.execute(
+      `SELECT 
+        a.id AS appointment_id,
+        a.appointment_date,
+        a.appointment_time,
+        a.status,
+        p.id AS patient_id,
+        p.full_name AS patient_name,
+        u.email
+       FROM users u
+       JOIN patients p ON p.user_id = u.id
+       JOIN appointments a ON a.patient_id = p.id
+       WHERE u.id = ?`,
+      [id]
+    );
+
+    if (appointmentHistorydata.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Patient appointment history not found" });
+    }
+     console.log(appointmentHistorydata);
+     const formattedappointmentHistorydata=appointmentHistorydata.map((hist)=>{
+      return {...hist,appointment_date:formatDateReadable(hist.appointment_date),appointment_time:convertTo12Hour(hist.appointment_time)}
+
+      })
+
+     console.log(formattedappointmentHistorydata);
+    res.status(200).json(formattedappointmentHistorydata);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+module.exports = {getPatientProfile,addPatient,getPatientAppointmentHistory};

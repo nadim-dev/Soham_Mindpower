@@ -30,6 +30,8 @@ export const videoAPI = {
 // ---------------- ADMIN ----------------
 export const adminAPI = {
   addPatient: (data) => api.post("/admin/addpatient", data),
+  sendNotification:(data)=> api.post("/admin/notification",data),
+  getNotifications:()=>api.get("/admin/notification")
 };
 
 // ----------- APPOINTMENT ----------------------
@@ -40,5 +42,26 @@ export const appointmentAPI={
    deleteAppointment: (id) => api.delete(`appointment/${id}`)
 }
 
+// --------- Chat APi --------------
+
+export const chatApi={
+   sendChat:(message)=>api.post("/chat",message),
+   getChat:()=>api.get("/chat")
+}
+
+
+// -----------Enquiry Api ---------------
+
+export const inquiryAPI={
+  createInquery:(data)=>api.post("/enquiries",data),
+  getAllEnquiries:()=>api.get("/enquiries")
+}
+
+// --------- Patient Profile --------
+
+export const patientAPI = {
+  getProfile: (id) => api.get(`/patient/profile/${id}`),
+  getAppointments: (id) => api.get(`/patient/appointmenthistory/${id}`)
+};
 
 export default api;

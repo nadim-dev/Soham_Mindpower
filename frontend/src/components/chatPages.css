@@ -1,0 +1,149 @@
+/* Root chat container */
+.chat-container {
+  width: 100%;
+  max-width: 900px;          /* wider on laptop */
+  height: 60vh;
+  margin: 40px auto;         /* center horizontally */
+  background: #ffffff;
+
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+/* Header */
+.chat-header {
+  padding: 16px;
+  text-align: center;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* Messages area */
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f9fafb;
+}
+
+/* Message row */
+.chat-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.chat-row.left {
+  justify-content: flex-start;
+}
+
+.chat-row.right {
+  justify-content: flex-end;
+}
+
+/* Message bubble */
+.chat-bubble {
+  max-width: 65%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  word-wrap: break-word;
+}
+
+/* Your message */
+.chat-bubble.me {
+  background: #2563eb;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+/* Other messages */
+.chat-bubble.other {
+  background: #e5e7eb;
+  color: #111827;
+  border-bottom-left-radius: 4px;
+}
+
+/* Sender name */
+.sender-name {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+/* Message text */
+.chat-text {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Time */
+.chat-time {
+  font-size: 11px;
+  text-align: right;
+  margin-top: 6px;
+  opacity: 0.6;
+}
+
+/* Input box */
+.chat-input {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.chat-input input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.chat-input button {
+  padding: 12px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.chat-input button:hover {
+  background: #1d4ed8;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .chat-container {
+    max-width: 720px;
+    height: 70vh;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .chat-container {
+    max-width: 90%;
+    height: 70vh;
+    margin: 10px;
+    border-radius: 10px;
+  }
+
+  .chat-bubble {
+    max-width: 75%;
+  }
+}

@@ -10,11 +10,63 @@ import {
     Calendar,
 } from 'lucide-react';
 import SideBar from './admin-panel/SideBar';
+import { useNavigate,useState } from 'react-router-dom';
+import { adminAPI } from '../services/api';
 
 const DoctorDashboard = () => {
+    const navigate=useNavigate();
+    const [showToast, setShowToast] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+
+    function vedioFunction(){
+        console.log("vedio function is running")
+        navigate("/admin/videoform")
+    }
+
+    async function sendNotification() {
+  try {
+    console.log("sendNotification is runnning")
+    const response = await adminAPI.sendNotification({message:
+      "New helpful video has been added to your dashboard. Watch it to improve your mental well-being."
+  });
+
+    if (response.data) {
+      setToastMessage("Notification sent successfully");
+      setShowToast(true);
+
+      // auto hide after 3 seconds
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+  } catch (error) {
+    setToastMessage("Failed to send notification");
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  }
+} 
+
     return (
         <div className="flex bg-gray-50 min-h-screen font-inter">
             <SideBar />
+            {showToast && (
+  <div className="
+    fixed top-5 left-1/2 -translate-x-1/2
+    z-50
+    bg-green-600 text-white
+    px-6 py-3
+    rounded-lg shadow-lg
+    flex items-center gap-2
+    animate-slideDown
+  ">
+    <Bell size={18} />
+    <span className="text-sm font-medium">{toastMessage}</span>
+  </div>
+)}
+
             <div className="flex-1 ml-0 md:ml-64 p-6 lg:p-10 max-w-7xl mx-auto">
                 {/* Header */}
                 <header className="mb-10">
@@ -37,11 +89,11 @@ const DoctorDashboard = () => {
                 <section className="mb-10">
                     <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Tools</h2>
                     <div className="flex flex-wrap gap-4">
-                        <QuickToolBtn icon={<PlusCircle size={18} />} label="Add Reports" primary />
-                        <QuickToolBtn icon={<Upload size={18} />} label="Upload Video" />
+                        <span onClick={()=>navigate("/admin/inquery")}><QuickToolBtn icon={<PlusCircle size={18} />} label="Inquiries" primary /></span>
+                        <span onClick={()=>{vedioFunction()}}><QuickToolBtn  icon={<Upload size={18} />} label="Upload Video" /></span>
                         <QuickToolBtn icon={<FileQuestion size={18} />} label="Add Test Qs" />
-                        <QuickToolBtn icon={<Bell size={18} />} label="Send Notification" />
-                        <QuickToolBtn icon={<MessageSquare size={18} />} label="View Messages" />
+                        <span onClick={()=>sendNotification()}><QuickToolBtn  icon={<Bell size={18} />} label="Send Notification" /></span>
+                        <span onClick={()=>{navigate("/chat")}}><QuickToolBtn icon={<MessageSquare size={18} />} label="View Messages" /></span>
                     </div>
                 </section>
 

@@ -53,6 +53,7 @@ const Appointment = () => {
             <div>Status</div>
             <div>Date</div>
             <div>Time</div>
+            <div>Action</div>
           </div>
 
           {/* Table Rows */}

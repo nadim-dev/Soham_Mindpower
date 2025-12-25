@@ -120,5 +120,45 @@ const addPatient = async (req, res) => {
   }
 };
 
+const sendNotification=async (req,res)=>{
+  try{
+  console.log("send notification function is running");
+  const {message}=req.body;
+  console.log("message",message);
+  const adminId = req.user.userId; 
 
-module.exports = { getAdminProfile,addPatient };
+  if (!message) {
+    return res.status(400).json({ message: "Notification message is required" });
+  }
+
+   const [notificationResult] = await pool.execute(
+      `INSERT INTO notifications (message, created_by)
+       VALUES (?, ?)`,
+      [message, adminId]
+   );
+
+    res.status(201).json({
+      message: "Notification sent to all patients successfully",
+    });
+  }catch(err){
+    return res.status(404).json({error:err.message});
+  }
+ 
+}
+
+
+const getNotification= async (req, res) => {
+  try {
+    const [notificationSet] = await pool.execute(
+      "SELECT * FROM notifications ORDER BY created_at DESC"
+    );
+
+    res.status(200).json(notificationSet);
+  } catch (error) {
+    console.error("Fetch notifications error:", error);
+    res.status(500).json({ message: "Failed to fetch notifications" });
+  }
+};
+
+
+module.exports = { getAdminProfile,addPatient,sendNotification ,getNotification};
