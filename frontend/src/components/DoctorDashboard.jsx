@@ -1,170 +1,270 @@
-import React from 'react';
-import {
-    PlusCircle,
-    Upload,
-    FileQuestion,
-    Bell,
-    MessageSquare,
-    CheckCircle,
-    PlayCircle,
-    Calendar,
-} from 'lucide-react';
-import SideBar from './admin-panel/SideBar';
-import { useNavigate,useState } from 'react-router-dom';
-import { adminAPI } from '../services/api';
+import React, { useEffect, useState } from "react";
+import SideBar from "./admin-panel/SideBar";
+import { Plus, Trash2, Send } from "lucide-react";
+import { questionAPI, patientQuestionAPI } from "../services/api";
 
-const DoctorDashboard = () => {
-    const navigate=useNavigate();
-    const [showToast, setShowToast] = React.useState(false);
-    const [toastMessage, setToastMessage] = React.useState("");
+const AddQA = () => {
+  const [questions, setQuestions] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-    function vedioFunction(){
-        console.log("vedio function is running")
-        navigate("/admin/videoform")
+  // -------- FORM STATE --------
+  const [questionText, setQuestionText] = useState("");
+  const [questionWeight, setQuestionWeight] = useState(4);
+
+  const [options, setOptions] = useState([
+    { label: "A", text: "", weight: 4 },
+    { label: "B", text: "", weight: 3 },
+    { label: "C", text: "", weight: 2 },
+    { label: "D", text: "", weight: 1 },
+  ]);
+
+  const [selectedPatientId, setSelectedPatientId] = useState("");
+
+  // -------- FETCH QUESTIONS --------
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
+
+  const fetchQuestions = async () => {
+    try {
+      const res = await questionAPI.getAll();
+      setQuestions(res.data.map(q => ({ ...q, isSelected: false })));
+    } catch (err) {
+      console.error("Failed to fetch questions", err);
     }
+  };
 
-    async function sendNotification() {
-  try {
-    console.log("sendNotification is runnning")
-    const response = await adminAPI.sendNotification({message:
-      "New helpful video has been added to your dashboard. Watch it to improve your mental well-being."
-  });
+  // -------- ADD QUESTION --------
+  const handleSaveQuestion = async () => {
+    if (!questionText.trim()) return alert("Question text is required");
 
-    if (response.data) {
-      setToastMessage("Notification sent successfully");
-      setShowToast(true);
+    try {
+      await questionAPI.create({
+        question_text: questionText,
+        question_weight: questionWeight,
+        options: options.map(o => ({
+          label: o.label,
+          text: o.text,
+          option_weight: o.weight,
+        })),
+      });
 
-      // auto hide after 3 seconds
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      // reset
+      setQuestionText("");
+      setQuestionWeight(4);
+      setOptions([
+        { label: "A", text: "", weight: 4 },
+        { label: "B", text: "", weight: 3 },
+        { label: "C", text: "", weight: 2 },
+        { label: "D", text: "", weight: 1 },
+      ]);
+
+      setShowModal(false);
+      fetchQuestions();
+    } catch (err) {
+      console.error("Error saving question", err);
+      alert("Failed to save question");
     }
-  } catch (error) {
-    setToastMessage("Failed to send notification");
-    setShowToast(true);
+  };
 
-    setTimeout(() => {
-      setShowToast(false);
-    }, 3000);
-  }
-} 
+  // -------- SELECT QUESTION --------
+  const toggleSelect = (id) => {
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === id ? { ...q, isSelected: !q.isSelected } : q
+      )
+    );
+  };
 
-    return (
-        <div className="flex bg-gray-50 min-h-screen font-inter">
-            <SideBar />
-            {showToast && (
-  <div className="
-    fixed top-5 left-1/2 -translate-x-1/2
-    z-50
-    bg-green-600 text-white
-    px-6 py-3
-    rounded-lg shadow-lg
-    flex items-center gap-2
-    animate-slideDown
-  ">
-    <Bell size={18} />
-    <span className="text-sm font-medium">{toastMessage}</span>
-  </div>
-)}
+  // -------- DELETE QUESTION --------
+  const deleteQuestion = async (id) => {
+    if (!window.confirm("Delete this question?")) return;
 
-            <div className="flex-1 ml-0 md:ml-64 p-6 lg:p-10 max-w-7xl mx-auto">
-                {/* Header */}
-                <header className="mb-10">
-                    <h1 className="text-3xl font-medium text-gray-900">
-                        Welcome, <span className="font-semibold">Dr. Sachin Potdar!</span>
-                    </h1>
-                </header>
+    try {
+      await questionAPI.delete(id);
+      fetchQuestions();
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
 
-                {/* Today's Overview */}
-                <section className="mb-10">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Today's Overview</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <StatCard label="Total Patients" value="124" />
-                        <StatCard label="Pending Reports" value="8" />
-                        <StatCard label="Upcoming Appts." value="5" />
-                    </div>
-                </section>
+  // -------- SEND QUESTIONS TO PATIENT --------
+  const sendToPatient = async () => {
+    const selectedIds = questions
+      .filter(q => q.isSelected)
+      .map(q => q.id);
 
-                {/* Quick Tools */}
-                <section className="mb-10">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Tools</h2>
-                    <div className="flex flex-wrap gap-4">
-                        <span onClick={()=>navigate("/admin/inquery")}><QuickToolBtn icon={<PlusCircle size={18} />} label="Inquiries" primary /></span>
-                        <span onClick={()=>{vedioFunction()}}><QuickToolBtn  icon={<Upload size={18} />} label="Upload Video" /></span>
-                        <QuickToolBtn icon={<FileQuestion size={18} />} label="Add Test Qs" />
-                        <span onClick={()=>sendNotification()}><QuickToolBtn  icon={<Bell size={18} />} label="Send Notification" /></span>
-                        <span onClick={()=>{navigate("/chat")}}><QuickToolBtn icon={<MessageSquare size={18} />} label="View Messages" /></span>
-                    </div>
-                </section>
+    if (!selectedPatientId)
+      return alert("Please select a patient");
 
-                {/* Recent Patient Activity */}
-                <section>
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Recent Patient Activity</h2>
-                    <div className="space-y-4">
-                        <ActivityItem
-                            icon={<CheckCircle size={20} />}
-                            text="Rohan completed Mental Test"
-                            time="2 mins ago"
-                            iconColor="text-gray-700"
-                            bgColor="bg-amber-50"
-                        />
-                        <ActivityItem
-                            icon={<PlayCircle size={20} />}
-                            text="Priya Viewed 'coping skill' video"
-                            time="15 mins ago"
-                            iconColor="text-gray-700"
-                            bgColor="bg-amber-50"
-                        />
-                        <ActivityItem
-                            icon={<Calendar size={20} />}
-                            text="Anjali Scheduled a new appointment"
-                            time="1 hr ago"
-                            iconColor="text-gray-700"
-                            bgColor="bg-amber-50"
-                        />
-                    </div>
-                </section>
-            </div>
+    if (selectedIds.length === 0)
+      return alert("Select at least one question");
+
+    try {
+      await patientQuestionAPI.send({
+        patient_id: selectedPatientId,
+        question_ids: selectedIds,
+      });
+
+      alert("Questions sent successfully");
+
+      setQuestions(prev =>
+        prev.map(q => ({ ...q, isSelected: false }))
+      );
+    } catch (err) {
+      console.error("Send failed", err);
+      alert("Failed to send questions");
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <SideBar />
+
+      <div className="flex-1 ml-64 p-8">
+        <h1 className="text-2xl font-bold mb-6">Add & Send Questions</h1>
+
+        {/* ACTION BAR */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-4 py-2 bg-yellow-400 rounded flex items-center gap-2"
+          >
+            <Plus size={18} /> Add Question
+          </button>
+
+          <select
+            value={selectedPatientId}
+            onChange={(e) => setSelectedPatientId(e.target.value)}
+            className="border rounded px-3 py-2"
+          >
+            <option value="">Select Patient</option>
+            <option value="1">Patient 1</option>
+            <option value="2">Patient 2</option>
+          </select>
+
+          <button
+            onClick={sendToPatient}
+            className="px-4 py-2 bg-indigo-600 text-white rounded flex items-center gap-2"
+          >
+            <Send size={18} /> Send Selected
+          </button>
         </div>
-    );
-};
 
-// Subcomponent: Statistic Card
-const StatCard = ({ label, value }) => {
-    return (
-        <div className="bg-amber-50 rounded-xl p-8 text-center flex flex-col items-center justify-center">
-            <span className="text-sm text-gray-600 font-medium mb-2">{label}</span>
-            <span className="text-4xl font-bold text-gray-900">{value}</span>
-        </div>
-    );
-};
-
-// Subcomponent: Quick Tool Button
-const QuickToolBtn = ({ icon, label, primary }) => {
-    return (
-        <button className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-colors ${primary
-            ? 'bg-amber-100 text-gray-900 hover:bg-amber-200'
-            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}>
-            {icon}
-            <span className="text-sm">{label}</span>
-        </button>
-    );
-};
-
-// Subcomponent: Activity Item
-const ActivityItem = ({ icon, text, time, bgColor }) => {
-    return (
-        <div className="flex items-center justify-between p-4 bg-white hover:bg-gray-50 rounded-xl border border-gray-50 transition-colors">
-            <div className="flex items-center space-x-4">
-                <div className={`p-2 rounded-lg ${bgColor} text-gray-800`}>
-                    {icon}
+        {/* QUESTIONS LIST */}
+        <div className="space-y-4">
+          {questions.map((q) => (
+            <div
+              key={q.id}
+              className={`p-6 bg-white rounded border ${
+                q.isSelected ? "border-green-500" : "border-gray-200"
+              }`}
+            >
+              <div className="flex justify-between">
+                <div>
+                  <h3 className="font-semibold">{q.question_text}</h3>
+                  <p className="text-sm text-gray-500">
+                    Question Weight: {q.question_weight}
+                  </p>
                 </div>
-                <span className="text-gray-800 font-medium">{text}</span>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => toggleSelect(q.id)}
+                    className={`px-3 py-1 rounded ${
+                      q.isSelected
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    +
+                  </button>
+
+                  <button
+                    onClick={() => deleteQuestion(q.id)}
+                    className="p-2 text-red-500"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+
+              <ul className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                {q.options?.map((o) => (
+                  <li key={o.id}>
+                    {o.option_label}. {o.option_text} (Weight: {o.option_weight})
+                  </li>
+                ))}
+              </ul>
             </div>
-            <span className="text-gray-400 text-sm whitespace-nowrap ml-4">{time}</span>
+          ))}
         </div>
-    );
+      </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded w-full max-w-lg">
+            <h2 className="text-lg font-bold mb-4">Add Question</h2>
+
+            <input
+              className="w-full border p-2 mb-3"
+              placeholder="Question text"
+              value={questionText}
+              onChange={(e) => setQuestionText(e.target.value)}
+            />
+
+            <input
+              type="number"
+              min="1"
+              className="w-full border p-2 mb-4"
+              placeholder="Question Weight (Max Marks)"
+              value={questionWeight}
+              onChange={(e) => setQuestionWeight(Number(e.target.value))}
+            />
+
+            {options.map((opt, i) => (
+              <div key={i} className="flex gap-3 mb-2">
+                <input
+                  className="flex-1 border p-2"
+                  placeholder={`Option ${opt.label}`}
+                  value={opt.text}
+                  onChange={(e) => {
+                    const copy = [...options];
+                    copy[i].text = e.target.value;
+                    setOptions(copy);
+                  }}
+                />
+
+                <input
+                  type="number"
+                  min="0"
+                  className="w-24 border p-2"
+                  placeholder="Weight"
+                  value={opt.weight}
+                  onChange={(e) => {
+                    const copy = [...options];
+                    copy[i].weight = Number(e.target.value);
+                    setOptions(copy);
+                  }}
+                />
+              </div>
+            ))}
+
+            <div className="flex justify-end gap-3 mt-4">
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button
+                onClick={handleSaveQuestion}
+                className="px-4 py-2 bg-yellow-400 rounded"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
-export default DoctorDashboard;
+export default AddQA;

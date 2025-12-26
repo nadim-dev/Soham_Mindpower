@@ -1,215 +1,149 @@
+/* ================= ROOT ================= */
 .payment-page-container {
-    min-height: 100vh;
-    padding: 24px 40px;
-    background-color: #f8f9fa;
-    font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc, #eef2ff);
+  padding: 28px 48px;
+  font-family: "Inter", sans-serif;
 }
 
+/* ================= HEADER ================= */
 .payment-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-    gap: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
 }
 
-.header-text h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #111827;
-    margin: 0;
+.payment-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
+/* ================= GRID ================= */
 .payment-grid {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
+  max-width: 960px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
 }
 
-.section-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 24px;
-}
-
-.methods-row {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-}
-
-/* Card Visual */
-.card-visual {
-    width: 300px;
-    height: 180px;
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    border-radius: 16px;
-    position: relative;
-    padding: 24px;
-    color: white;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-.card-chip {
-    width: 40px;
-    height: 30px;
-    background: #fbbf24;
-    border-radius: 6px;
-    margin-bottom: 24px;
-}
-
-.card-number {
-    font-size: 18px;
-    letter-spacing: 2px;
-    margin-bottom: 32px;
-    font-family: monospace;
-}
-
-.card-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.card-logo {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 18px;
-}
-
-/* Add Method Button */
+/* ================= PAY CARD ================= */
 .add-method-btn {
-    width: 300px;
-    height: 180px;
-    border: 2px dashed #e5e7eb;
-    border-radius: 16px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
+  width: 360px;
+  height: 190px;
+  border-radius: 20px;
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(135deg, #6366f1, #22c55e) border-box;
+  border: 2px dashed transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15);
 }
 
 .add-method-btn:hover {
-    border-color: #22c55e;
-    background-color: #f0fdf4;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 25px 45px rgba(34, 197, 94, 0.3);
 }
 
 .plus-icon-box {
-    width: 40px;
-    height: 40px;
-    background: #f3f4f6;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6b7280;
-    margin-bottom: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #22c55e);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
 }
 
-.add-text {
-    color: #6b7280;
-    font-weight: 500;
+.add-method-btn span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
 }
 
-/* Transaction List */
+/* ================= SECTION TITLE ================= */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 18px;
+}
+
+/* ================= TRANSACTIONS ================= */
 .transactions-list {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
 }
 
 .transaction-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    border-bottom: 1px solid #f3f4f6;
+  padding: 18px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.25s ease;
 }
 
-.transaction-item:last-child {
-    border-bottom: none;
+.transaction-item:hover {
+  background: #f8fafc;
+}
+
+.transaction-item:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .tx-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
-.tx-icon-box {
-    width: 32px;
-    height: 32px;
-    background: #dcfce7;
-    color: #16a34a;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.tx-left svg {
+  color: #22c55e;
 }
 
 .tx-date {
-    font-weight: 500;
-    color: #111827;
-}
-
-.tx-desc {
-    color: #6b7280;
-}
-
-.tx-right {
-    display: flex;
-    align-items: center;
-    gap: 24px;
+  font-size: 14px;
+  color: #475569;
 }
 
 .tx-amount {
-    font-weight: 600;
-    color: #111827;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .download-btn {
-    background: none;
-    border: none;
-    color: #9ca3af;
-    cursor: pointer;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  transition: 0.2s;
 }
 
 .download-btn:hover {
-    color: #4b5563;
+  color: #0f172a;
+  transform: scale(1.1);
 }
 
-/* Responsive Styles */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
-    .payment-page-container {
-        padding: 16px;
-    }
+  .payment-page-container {
+    padding: 20px;
+  }
 
-    .methods-row {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card-visual,
-    .add-method-btn {
-        width: 100%;
-        max-width: 340px;
-    }
-
-    .desktop-only {
-        display: none;
-    }
-
-    .tx-right {
-        gap: 12px;
-    }
+  .add-method-btn {
+    width: 100%;
+  }
 }

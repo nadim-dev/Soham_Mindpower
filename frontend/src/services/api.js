@@ -31,7 +31,8 @@ export const videoAPI = {
 export const adminAPI = {
   addPatient: (data) => api.post("/admin/addpatient", data),
   sendNotification:(data)=> api.post("/admin/notification",data),
-  getNotifications:()=>api.get("/admin/notification")
+  getNotifications:()=>api.get("/admin/notification"),
+  updatePassword:(data)=>api.post("/admin/profile",data),
 };
 
 // ----------- APPOINTMENT ----------------------
@@ -63,5 +64,47 @@ export const patientAPI = {
   getProfile: (id) => api.get(`/patient/profile/${id}`),
   getAppointments: (id) => api.get(`/patient/appointmenthistory/${id}`)
 };
+
+
+// ----------- PAYMENT API (Razorpay) ----------------
+
+export const paymentAPI = {
+  createOrder: (data) => api.post("/payments/create-order", data),
+  verifyPayment: (data) => api.post("/payments/verify", data),
+  getMyPayments: () => api.get("/payments/my-transactions"),
+};
+
+// ----------- RECEIPT API ----------------
+
+export const receiptAPI = {
+  downloadReceipt: (data) =>
+    api.post("/payments/receipt", data, {
+      responseType: "blob", // 🔴 VERY IMPORTANT
+    }),
+};
+
+
+// ----------- QUESTION API ----------------
+
+export const questionAPI = {
+  // get all questions created by doctor
+  getAll: () => api.get("/questions"),
+
+  // create new question with options
+  create: (data) => api.post("/questions", data),
+
+  // delete question
+  delete: (id) => api.delete(`/questions/${id}`),
+};
+
+// ----------- PATIENT QUESTION API ----------------
+
+export const patientQuestionAPI = {
+  // send selected questions to patient (BATCH)
+  send: (data) => api.post("/patient-questions", data),
+};
+
+
+
 
 export default api;

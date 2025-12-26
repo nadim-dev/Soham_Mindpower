@@ -161,4 +161,60 @@ const getNotification= async (req, res) => {
 };
 
 
-module.exports = { getAdminProfile,addPatient,sendNotification ,getNotification};
+
+const updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Current password and new password are required",
+      });
+    }
+
+    // ✅ get logged-in admin id from JWT
+    const userId =req.user.userId;
+
+    // 1️⃣ fetch existing password hash
+    const [rows] = await pool.execute(
+      "SELECT password FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const storedHash = rows[0].password;
+
+    // 2️⃣ compare current password
+    const isMatch = await bcrypt.compare(currentPassword, storedHash);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Current password is incorrect",
+      });
+    }
+
+    // 3️⃣ hash new password
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // 4️⃣ update password
+    await pool.execute(
+      "UPDATE users SET password = ? WHERE id = ?",
+      [newHashedPassword, userId]
+    );
+
+    return res.json({
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    console.error("Update password error:", error);
+    res.status(500).json({
+      message: "Server error while updating password",
+    });
+  }
+};
+
+
+module.exports = { getAdminProfile,addPatient,sendNotification ,getNotification,updatePassword};

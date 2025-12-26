@@ -11,11 +11,21 @@ import {
     ClipboardList,
     Calendar // Added Calendar icon
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const PatientSideBar = () => {
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const navigate=useNavigate();
+    const handleLogout = () => {
+    console.log("Logout function is running");
+    // ✅ remove auth data
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // ✅ redirect to login/home
+    navigate("/");
+  };
 
     const menuItems = [
         { name: 'Dashboard', icon: LayoutDashboard, path: '/patient/dashboard' },
@@ -77,10 +87,13 @@ const PatientSideBar = () => {
                 </nav>
 
                 <div className="p-4 mt-auto">
-                    <Link to="/" className="flex items-center gap-3 px-4 py-3 text-red-500 text-sm font-medium hover:bg-red-50 rounded-lg w-full transition-colors">
-                        <LogOut size={20} />
-                        Log Out
-                    </Link>
+                     <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-3 text-red-500 text-sm font-medium hover:bg-red-50 rounded-lg w-full transition-colors"
+                      >
+                     <LogOut size={20} />
+                      Log Out
+                     </button>
                 </div>
             </div>
         </>

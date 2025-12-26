@@ -25,12 +25,15 @@ const SideBar = () => {
         setExpandedMenu(expandedMenu === menuName ? null : menuName);
     };
 
-    const logout = () => {
-    console.log("logout function is running");
+     const handleLogout = () => {
+    console.log("Logout function is running");
+    // ✅ remove auth data
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-     navigate("/login");
-   };
+
+    // ✅ redirect to login/home
+    navigate("/");
+  };
 
 
     const menuItems = [
@@ -150,13 +153,13 @@ const SideBar = () => {
                 </nav>
 
                 <div className="p-4 mt-auto">
-                    <div
-                    type='button'
-                    onClick={logout}
-                    className="flex items-center gap-3 px-4 py-3 text-red-500 text-sm font-medium hover:bg-red-50 rounded-lg w-full transition-colors">
-                        <LogOut size={20} />
-                        Log Out
-                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-3 text-red-500 text-sm font-medium hover:bg-red-50 rounded-lg w-full transition-colors"
+                      >
+                     <LogOut size={20} />
+                      Log Out
+                     </button>
                 </div>
             </div>
         </>

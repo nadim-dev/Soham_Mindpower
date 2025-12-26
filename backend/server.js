@@ -18,7 +18,7 @@ const enquiryRoutes = require('./routes/enquiryRoutes');
 const videoRoutes = require('./routes/videoRoutes');
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const chatRoutes = require("./routes/chatRoutes");
-
+const paymentRoutes=require("./routes/paymentRoutes")
 // Import database
 const pool = require('./config/db');
 
@@ -49,7 +49,7 @@ app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/video', videoRoutes);
 app.use('/api/appointment', appointmentRoutes);
 app.use('/api/chat', chatRoutes);
-
+app.use("/api/payments",paymentRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
